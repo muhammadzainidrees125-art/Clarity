@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
 
-class CustomButton extends StatefulWidget {
-  const CustomButton({super.key, required this.title});
+class CustomElevatedbutton extends StatefulWidget {
+  const CustomElevatedbutton({
+    super.key,
+    required this.title,
+    required this.width,
+  });
 
   final String title;
+  final double width;
 
   @override
-  State<CustomButton> createState() => _CustomButtonState();
+  State<CustomElevatedbutton> createState() => _CustomElevatedbuttonState();
 }
 
-class _CustomButtonState extends State<CustomButton> {
+class _CustomElevatedbuttonState extends State<CustomElevatedbutton> {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xff004AC6),
-        shape: ContinuousRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      child: Text(
-        widget.title,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight(700),
+    return SizedBox(
+      width: widget.width,
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(backgroundColor: Color(0xff004AC6)),
+        child: Text(
+          widget.title,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight(700),
+          ),
         ),
       ),
     );

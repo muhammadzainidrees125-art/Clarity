@@ -21,13 +21,18 @@ class _CustomSecuritycontainerState extends State<CustomSecuritycontainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 94,
-      width: 350,
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: widget.color,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Row(children: [Icon(widget.icon), Text(widget.title)]),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(widget.icon),
+          Expanded(child: Text(widget.title)),
+        ],
+      ),
     );
   }
 }
