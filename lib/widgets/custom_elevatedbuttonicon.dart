@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Customelevatedbuttonicon extends StatefulWidget {
-  const Customelevatedbuttonicon({super.key});
+  const Customelevatedbuttonicon({
+    super.key,
+    required this.icon,
+    required this.color,
+  });
+
+  final IconData icon;
+  final Color color;
 
   @override
   State<Customelevatedbuttonicon> createState() =>
@@ -15,18 +22,20 @@ class _CustomelevatedbuttoniconState extends State<Customelevatedbuttonicon> {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {},
+        style: ElevatedButton.styleFrom(backgroundColor: widget.color),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           spacing: 10,
           children: [
-            Icon(Icons.account_circle_outlined, color: Color(0xff191B23)),
             Text(
-              'Sign up with Google',
+              'Login',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight(600),
-                color: Color(0xff191B23),
+                color: Color(0xffffffff),
               ),
             ),
+            Icon(widget.icon, color: Color(0xffffffff)),
           ],
         ),
       ),
