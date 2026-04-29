@@ -1,5 +1,6 @@
 import 'package:clarity/feature/core/custom_textfromfield.dart';
 import 'package:clarity/widgets/custom_container.dart';
+import 'package:clarity/widgets/custom_elevatedbuttonicon.dart';
 import 'package:flutter/material.dart';
 
 class SigninScreen extends StatefulWidget {
@@ -13,7 +14,7 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffFAF8FF).withValues(alpha: 0.5),
+      backgroundColor: Color(0xffFAF8FF),
       body: SingleChildScrollView(
         padding: EdgeInsetsGeometry.all(12),
         child: Column(
@@ -75,31 +76,19 @@ class _SigninScreenState extends State<SigninScreen> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  Text(
-                    'EMAIL ADDRESS',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight(600),
-                      color: Color(0xff434655),
-                    ),
-                  ),
-                  SizedBox(height: 2),
-                  CustomTextfromfield(
-                    icon: Icon(Icons.email),
-                    title: 'Enter your email address',
+
+                  Column(
+                    children: [
+                      CustomTextfromfield(
+                        prefixIcon: Icon(Icons.email),
+                        title: 'EMAIL ADDRESS',
+                      ),
+                    ],
                   ),
                   SizedBox(height: 10),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        'PASSWORD',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight(600),
-                          color: Color(0xff434655),
-                        ),
-                      ),
                       Text(
                         'Forgot Password?',
                         style: TextStyle(
@@ -110,10 +99,119 @@ class _SigninScreenState extends State<SigninScreen> {
                       ),
                     ],
                   ),
-                  CustomTextfromfield(title: 'Enter your password'),
-                  Icon(Icons.lock),
+                  SizedBox(height: 5),
+                  CustomTextfromfield(
+                    title: 'PASSWORD',
+                    prefixIcon: Icon(Icons.lock),
+                    suffixIcon: Icon(Icons.remove_red_eye),
+                  ),
+                  SizedBox(height: 20),
+                  Column(
+                    children: [
+                      Customelevatedbuttonicon(
+                        icon: Icons.arrow_forward,
+                        color: Color(0xff004AC6),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        spacing: 15,
+                        children: [
+                          Container(
+                            height: 1,
+                            width: 70,
+                            color: Color(0xffC3C6D7),
+                          ),
+                          Text(
+                            'OR CONTINUE WITH',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight(600),
+                              color: Color(0xff434655),
+                            ),
+                          ),
+                          Container(
+                            height: 1,
+                            width: 70,
+                            color: Color(0xffC3C6D7),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        spacing: 16,
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 133,
+                            decoration: BoxDecoration(
+                              color: Color(0xffffffff),
+                              border: Border.all(color: Color(0xffC3C6D7)),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(5),
+                                  height: 40,
+                                  width: 40,
+                                  child: Image.asset('assets/download.jpg'),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                  ),
+                                ),
+                                Text(
+                                  'Google',
+                                  style: TextStyle(
+                                    color: Color(0xff191B23),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight(400),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: 50,
+                            width: 133,
+                            decoration: BoxDecoration(
+                              color: Color(0xffffffff),
+                              border: Border.all(color: Color(0xffC3C6D7)),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(5),
+                                  height: 40,
+                                  width: 40,
+                                  child: Image.asset('assets/Icon.png'),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffffffff),
+                                  ),
+                                ),
+                                Text(
+                                  'Apple',
+                                  style: TextStyle(
+                                    color: Color(0xff191B23),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight(400),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               ),
+            ),
+            Text(
+              'Don\'t have an account? Sign Up',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight(400)),
             ),
           ],
         ),
