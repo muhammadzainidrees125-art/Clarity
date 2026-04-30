@@ -40,13 +40,7 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
       body: Padding(
         padding: EdgeInsetsGeometry.all(25),
         child: Column(
-          children: [
-            CustomContainer(
-              child: Image.asset('assets/Mouse.png'),
-              height: 350,
-              width: 350,
-            ),
-          ],
+          children: [CustomContainer(child: Image.asset('assets/Mouse.png'))],
         ),
       ),
     );

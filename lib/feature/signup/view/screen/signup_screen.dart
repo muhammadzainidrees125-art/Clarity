@@ -49,8 +49,6 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             SizedBox(height: 20),
             CustomContainer(
-              height: 595,
-              width: 350,
               child: Column(
                 spacing: 40,
                 children: [
@@ -86,9 +84,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ],
                       ),
-                      CustomElevatedbuttonicon(
-                        icon: Icons.apple,
-                        color: Color(0XFF000000),
+                      Customelevatedbuttonicon(
+                        icon: Icons.account_circle_outlined,
+                        color: Color(0XFFFFFFFF),
                       ),
                     ],
                   ),

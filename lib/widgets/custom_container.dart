@@ -4,14 +4,16 @@ class CustomContainer extends StatefulWidget {
   const CustomContainer({
     super.key,
     required this.child,
-    required this.height,
-    required this.width,
+    this.color,
+    this.padding,
+    this.borderRadius,
   });
 
   final Widget child;
-  final double height;
-  final double width;
 
+  final Color? color;
+  final EdgeInsets? padding;
+  final BorderRadius? borderRadius;
   @override
   State<CustomContainer> createState() => _CustomContainerState();
 }
@@ -20,12 +22,11 @@ class _CustomContainerState extends State<CustomContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(24),
-      height: widget.height,
-      width: widget.width,
+      padding: widget.padding ?? EdgeInsets.all(24),
+
       decoration: BoxDecoration(
-        color: Color(0xffffffff),
-        borderRadius: BorderRadius.circular(10),
+        color: widget.color ?? Color(0xffffffff),
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
       ),
       child: widget.child,
     );

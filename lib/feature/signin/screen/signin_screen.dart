@@ -57,9 +57,6 @@ class _SigninScreenState extends State<SigninScreen> {
               ),
             ),
             CustomContainer(
-              height: 450,
-              width: 350,
-
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -155,10 +152,10 @@ class _SigninScreenState extends State<SigninScreen> {
                                   padding: EdgeInsets.all(5),
                                   height: 40,
                                   width: 40,
-                                  child: Image.asset('assets/download.jpg'),
                                   decoration: BoxDecoration(
                                     color: Color(0xffffffff),
                                   ),
+                                  child: Image.asset('assets/download.jpg'),
                                 ),
                                 Text(
                                   'Google',
@@ -186,10 +183,10 @@ class _SigninScreenState extends State<SigninScreen> {
                                   padding: EdgeInsets.all(5),
                                   height: 40,
                                   width: 40,
-                                  child: Image.asset('assets/Icon.png'),
                                   decoration: BoxDecoration(
                                     color: Color(0xffffffff),
                                   ),
+                                  child: Image.asset('assets/Icon.png'),
                                 ),
                                 Text(
                                   'Apple',

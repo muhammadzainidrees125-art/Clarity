@@ -1,4 +1,4 @@
-import 'package:clarity/feature/signin/screen/wellcome_screen.dart';
+import 'package:clarity/dashbord/screen/dashbord_screen.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: WellcomeScreen(),
+      home: DashbordScreen(),
     );
   }
 }
