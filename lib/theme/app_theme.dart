@@ -10,7 +10,7 @@ class AppTheme {
   static const Color errorColor = Color(0xFFEF4444);
   static const Color successColor = Color(0xFF22C55E);
 
-  static ThemeData lighttheme = ThemeData(
+  static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     colorScheme: ColorScheme(
       brightness: Brightness.light,

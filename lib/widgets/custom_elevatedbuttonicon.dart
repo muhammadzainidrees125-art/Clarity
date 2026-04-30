@@ -5,10 +5,12 @@ class Customelevatedbuttonicon extends StatefulWidget {
     super.key,
     required this.icon,
     required this.color,
+    this.iconAlignment = IconAlignment.start,
   });
 
   final IconData icon;
   final Color color;
+  final IconAlignment iconAlignment;
 
   @override
   State<Customelevatedbuttonicon> createState() =>
@@ -18,26 +20,24 @@ class Customelevatedbuttonicon extends StatefulWidget {
 class _CustomelevatedbuttoniconState extends State<Customelevatedbuttonicon> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(backgroundColor: widget.color),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 10,
-          children: [
-            Text(
-              'Login',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight(600),
-                color: Color(0xffffffff),
-              ),
+    return ElevatedButton.icon(
+      iconAlignment: widget.iconAlignment,
+      icon: Icon(widget.icon, color: Color(0xffffffff)),
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(backgroundColor: widget.color),
+      label: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 10,
+        children: [
+          Text(
+            'Save Task',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight(600),
+              color: Color(0xffffffff),
             ),
-            Icon(widget.icon, color: Color(0xffffffff)),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

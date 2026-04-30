@@ -5,10 +5,12 @@ class CustomElevatedbutton extends StatefulWidget {
     super.key,
     required this.title,
     required this.width,
+    this.fontsize = 20,
   });
 
   final String title;
   final double width;
+  final double fontsize;
 
   @override
   State<CustomElevatedbutton> createState() => _CustomElevatedbuttonState();
@@ -26,7 +28,7 @@ class _CustomElevatedbuttonState extends State<CustomElevatedbutton> {
           widget.title,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20,
+            fontSize: widget.fontsize,
             fontWeight: FontWeight(700),
           ),
         ),
