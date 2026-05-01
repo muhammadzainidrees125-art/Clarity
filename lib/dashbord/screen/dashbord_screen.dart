@@ -1,4 +1,5 @@
 import 'package:clarity/feature/signup/view/screen/home_screen.dart';
+import 'package:clarity/feature/signup/view/screen/analytics_screen.dart';
 import 'package:clarity/feature/signup/view/screen/setting_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class DashbordScreen extends StatefulWidget {
 }
 
 class _DashbordScreenState extends State<DashbordScreen> {
-  List<Widget> screens = [HomeScreen(), Text('data'), SettingScreen()];
+  List<Widget> screens = [HomeScreen(), AnalyticsScreen(), SettingScreen()];
   int val = 0;
   @override
   Widget build(BuildContext context) {
