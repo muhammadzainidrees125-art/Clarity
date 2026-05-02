@@ -1,4 +1,4 @@
-import 'package:clarity/feature/task/view/screen/addtask_screen.dart';
+import 'package:clarity/feature/task/view/screen/add_task_screen.dart';
 import 'package:clarity/feature/wellcome/view/screen/wellcome_screen.dart';
 import 'package:clarity/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +16,6 @@ class AppPages {
     AppRoutes.register: (context) => const SignupScreen(),
     AppRoutes.main: (context) => const DashbordScreen(),
     AppRoutes.profile: (context) => const SettingScreen(),
-    AppRoutes.task: (context) => const AddtaskScreen(),
+    AppRoutes.task: (context) => const AddTaskScreen(),
   };
 }
