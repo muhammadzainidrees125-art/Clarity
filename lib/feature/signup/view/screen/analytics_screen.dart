@@ -1,4 +1,6 @@
 import 'package:clarity/widgets/custom_container.dart';
+import 'package:clarity/widgets/custom_securitycontainer.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class AnalyticsScreen extends StatefulWidget {
@@ -184,6 +186,127 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   ),
                 ],
               ),
+            ),
+            SizedBox(height: 20),
+            CustomContainer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 28,
+                    width: 350,
+                    child: Text(
+                      'Time Spent',
+                      style: TextTheme.of(context).bodyLarge?.copyWith(
+                        color: Color(0XFF191B23),
+                        fontSize: 20,
+                        fontWeight: FontWeight(700),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'Hours focused per day',
+                    style: TextTheme.of(context).bodyMedium?.copyWith(
+                      color: Color(0XFF434655),
+                      fontSize: 14,
+                      fontWeight: FontWeight(400),
+                    ),
+                  ),
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16),
+                      height: 250,
+                      decoration: BoxDecoration(
+                        color: Color(0xfff5f6fa), // light background
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 10,
+                            offset: Offset(0, 5),
+                          ),
+                        ],
+                      ),
+
+                      child: LineChart(
+                        LineChartData(
+                          gridData: FlGridData(show: false),
+
+                          borderData: FlBorderData(show: false),
+
+                          titlesData: FlTitlesData(
+                            topTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            rightTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 50,
+                                getTitlesWidget: (value, meta) {
+                                  switch (value.toInt()) {
+                                    case 0:
+                                      return Text('0h');
+                                    case 4:
+                                      return Text('4h');
+                                    case 8:
+                                      return Text('8h+');
+                                  }
+                                  return SizedBox();
+                                },
+                              ),
+                            ),
+                          ),
+
+                          lineBarsData: [
+                            LineChartBarData(
+                              isCurved: true,
+                              color: Colors.blue,
+                              barWidth: 3,
+
+                              spots: [
+                                FlSpot(0, 2),
+                                FlSpot(2, 3),
+                                FlSpot(4, 5),
+                                FlSpot(6, 3),
+                                FlSpot(8, 6),
+                              ],
+
+                              dotData: FlDotData(
+                                show: true,
+                                getDotPainter: (spot, percent, bar, index) {
+                                  return FlDotCirclePainter(
+                                    radius: 4,
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                    strokeColor: Colors.blue,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            CustomSecuritycontainer(
+              icon: Icons.lightbulb_rounded,
+              title:
+                  'Youre most productive on'
+                  '**Wednesdays** before 11:00 AM.'
+                  'Try scheduling your deep work tasks'
+                  'then! ',
+              color: Color(0XFFF3F3FE),
             ),
           ],
         ),
