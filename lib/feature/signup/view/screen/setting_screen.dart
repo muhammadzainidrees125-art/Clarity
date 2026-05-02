@@ -1,6 +1,7 @@
 import 'package:clarity/widgets/app_information_widget.dart';
 import 'package:clarity/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -268,6 +269,141 @@ class _SettingScreenState extends State<SettingScreen> {
               ),
             ),
             AppInformationWidget(),
+            SizedBox(height: 20),
+            CustomContainer(
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 26,
+                    children: [
+                      Container(
+                        height: 48,
+                        width: 48,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/zain.png'),
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Muhammad Zain Idress',
+                              style: TextTheme.of(context).bodyMedium?.copyWith(
+                                color: Color(0XFF191B23),
+                                fontSize: 14,
+                                fontWeight: FontWeight(600),
+                              ),
+                            ),
+                            Text(
+                              'Flutter Application developer',
+                              style: TextTheme.of(context).bodyMedium?.copyWith(
+                                color: Color(0XFF434655),
+                                fontSize: 14,
+                                fontWeight: FontWeight(400),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'Every great app starts with a single line of code—and the courage to write it.',
+                              style: TextTheme.of(context).bodyMedium?.copyWith(
+                                color: Color(0XFF434655),
+                                fontSize: 14,
+                                fontWeight: FontWeight(400),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            CustomContainer(
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 26,
+                    children: [
+                      Container(
+                        height: 48,
+                        width: 48,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/Arqam.png'),
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Muhammad Arqam Attar',
+                              style: TextTheme.of(context).bodyMedium?.copyWith(
+                                color: Color(0XFF191B23),
+                                fontSize: 14,
+                                fontWeight: FontWeight(600),
+                              ),
+                            ),
+                            Text(
+                              'Flutter Application developer',
+                              style: TextTheme.of(context).bodyMedium?.copyWith(
+                                color: Color(0XFF434655),
+                                fontSize: 14,
+                                fontWeight: FontWeight(400),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'Two minds, one vision—built step by step, from nothing to something real',
+                              style: TextTheme.of(context).bodyMedium?.copyWith(
+                                color: Color(0XFF434655),
+                                fontSize: 14,
+                                fontWeight: FontWeight(400),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              alignment: Alignment.center,
+              height: 170,
+              width: 400,
+              child: Column(
+                children: [
+                  Text(
+                    'MINIMALIST. PROFESSIONAL. ORGANIZED.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight(600),
+                      color: Color(0XFF737686),
+                    ),
+                  ),
+                  Text(
+                    'Powered by BetterCraft',
+                    style: GoogleFonts.grechenFuemen(
+                      fontSize: 12,
+                      color: Color(0XFF737686),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
