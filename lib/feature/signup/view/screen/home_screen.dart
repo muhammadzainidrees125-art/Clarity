@@ -1,5 +1,5 @@
 import 'package:clarity/feature/signin/screen/custom_card.dart';
-import 'package:clarity/feature/signup/view/screen/daily_progress.dart';
+import 'package:clarity/feature/signup/view/widgets/daily_progress.dart';
 import 'package:clarity/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,64 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+enum TaskStatus { all, pending, completed }
+
+class TaskItem {
+  TaskItem({
+    required this.title,
+    required this.subtitle,
+    required this.badgeText,
+    required this.badgeColor,
+    required this.completed,
+    required this.hasLeftBorder,
+  });
+
+  final String title;
+  final String subtitle;
+  final String badgeText;
+  final Color badgeColor;
+  final bool completed;
+  final bool hasLeftBorder;
+}
+
 class _HomeScreenState extends State<HomeScreen> {
+  TaskStatus selectedStatus = TaskStatus.all;
+
+  final List<TaskItem> tasks = [
+    TaskItem(
+      title: 'Finalize Q4 Marketing Budget',
+      subtitle: 'Today, 10:00 AM',
+      badgeText: 'HIGH',
+      badgeColor: Color(0xffFFDAD6),
+      completed: false,
+      hasLeftBorder: true,
+    ),
+    TaskItem(
+      title: 'Update Design System Tokens',
+      subtitle: 'Today, 2:30 PM',
+      badgeText: 'MEDIUM',
+      badgeColor: Color(0xffFFDBCD),
+      completed: false,
+      hasLeftBorder: true,
+    ),
+    TaskItem(
+      title: 'Morning Standup Meeting',
+      subtitle: 'Completed 9:15 AM',
+      badgeText: 'ROUTINE',
+      badgeColor: Color(0xffD0E1FB),
+      completed: true,
+      hasLeftBorder: true,
+    ),
+  ];
+
+  List<TaskItem> get filteredTasks {
+    if (selectedStatus == TaskStatus.all) return tasks;
+    if (selectedStatus == TaskStatus.pending) {
+      return tasks.where((task) => !task.completed).toList();
+    }
+    return tasks.where((task) => task.completed).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,30 +83,55 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(25),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          spacing: 12,
           children: [
             DailyProgress(),
             CustomCard(),
-            SizedBox(height: 20),
-            TaskChoiceChipSection(),
+            TaskChoiceChipSection(
+              selectedIndex: selectedStatus.index,
+              onSelected: (index) {
+                setState(() {
+                  selectedStatus = TaskStatus.values[index];
+                });
+              },
+            ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               spacing: 15,
-              children: [
-                CustomContainer(
-                  border: Border(
-                    left: BorderSide(color: Color(0xffBA1A1A), width: 4),
-                  ),
+              children: filteredTasks.map((task) {
+                return CustomContainer(
+                  border: task.hasLeftBorder
+                      ? Border(
+                          left: BorderSide(
+                            color: task.completed
+                                ? Color(0XFF004AC6)
+                                : Color(0xffBA1A1A),
+                            width: 4,
+                          ),
+                        )
+                      : null,
                   padding: EdgeInsets.all(10),
                   child: Column(
                     children: [
                       Row(
                         children: [
-                          Radio(value: Icons.radio_button_on_outlined),
+                          Icon(
+                            task.completed
+                                ? Icons.check_circle_outline
+                                : Icons.radio_button_off_outlined,
+                            color: task.completed
+                                ? Color(0xff004AC6)
+                                : Color(0xffA1A1A1),
+                          ),
                           Flexible(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Finalize Q4 Marketing Budget',
+                                  task.title,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight(500),
@@ -61,22 +143,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                   spacing: 10,
                                   children: [
                                     Image.asset('assets/Icon (2).png'),
-
-                                    Text('Today, 10:00 AM'),
+                                    Text(task.subtitle),
                                     Container(
                                       padding: EdgeInsets.all(5),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(
                                           100,
                                         ),
-                                        color: Color(0xffFFDAD6),
+                                        color: task.badgeColor,
                                       ),
                                       child: Column(
                                         children: [
                                           Text(
-                                            'HIGH',
+                                            task.badgeText,
                                             style: TextStyle(
-                                              color: Color(0xffBA1A1A),
+                                              color: task.completed
+                                                  ? Color(0xff54647A)
+                                                  : Color(0xffBA1A1A),
                                               fontSize: 10,
                                               fontWeight: FontWeight(700),
                                             ),
@@ -93,125 +176,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                ),
-                CustomContainer(
-                  border: Border(
-                    left: BorderSide(color: Color(0xffBA1A1A), width: 4),
-                  ),
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Radio(value: Icons.radio_button_on_outlined),
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Update Design System Tokens',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight(500),
-                                    color: Color(0xff191B23),
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Image.asset('assets/Icon (2).png'),
-
-                                    Text('Today, 2:30 PM'),
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          100,
-                                        ),
-                                        color: Color(0xffFFDBCD),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            'Medium',
-                                            style: TextStyle(
-                                              color: Color(0xffBA1A1A),
-                                              fontSize: 10,
-                                              fontWeight: FontWeight(700),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                CustomContainer(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Radio(value: Icons.radio_button_on_outlined),
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Morning Standup Meeting',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight(500),
-                                    color: Color(0xff191B23),
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Image.asset('assets/Icon (2).png'),
-
-                                    Text('Completed 9:15 AM'),
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          100,
-                                        ),
-                                        color: Color(0xffD0E1FB),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            'ROUTINE',
-                                            style: TextStyle(
-                                              color: Color(0xff54647A),
-                                              fontSize: 10,
-                                              fontWeight: FontWeight(700),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                );
+              }).toList(),
             ),
           ],
         ),
@@ -220,33 +186,35 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class TaskChoiceChipSection extends StatefulWidget {
-  const TaskChoiceChipSection({super.key});
+class TaskChoiceChipSection extends StatelessWidget {
+  const TaskChoiceChipSection({
+    super.key,
+    required this.selectedIndex,
+    required this.onSelected,
+  });
 
-  @override
-  State<TaskChoiceChipSection> createState() => _TaskChoiceChipSectionState();
-}
+  final int selectedIndex;
+  final ValueChanged<int> onSelected;
 
-class _TaskChoiceChipSectionState extends State<TaskChoiceChipSection> {
-  int selectedIndex = 0;
-
-  final List<String> items = ['All', 'Pending', 'Completed'];
+  final List<String> items = const ['All', 'Pending', 'Completed'];
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 10,
-      children: List.generate(items.length, (index) {
-        return CustomChoiceChip(
-          title: items[index],
-          isSelected: selectedIndex == index,
-          onTap: () {
-            setState(() {
-              selectedIndex = index;
-            });
-          },
-        );
-      }),
+    return SizedBox(
+      height: 50,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: List.generate(items.length, (index) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: CustomChoiceChip(
+              title: items[index],
+              isSelected: selectedIndex == index,
+              onTap: () => onSelected(index),
+            ),
+          );
+        }),
+      ),
     );
   }
 }

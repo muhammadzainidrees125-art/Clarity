@@ -1,20 +1,19 @@
-//import 'package:flutter/cupertino.dart';
+import 'package:clarity/feature/signin/screen/view/wellcome_screen.dart';
+import 'package:clarity/routes/app_routes.dart';
+import 'package:flutter/material.dart';
+import 'package:clarity/dashbord/screen/dashbord_screen.dart';
+import 'package:clarity/feature/signin/screen/signin_screen.dart';
+import 'package:clarity/feature/signup/view/screen/home_screen.dart';
+import 'package:clarity/feature/signup/view/screen/setting_screen.dart';
+import 'package:clarity/feature/signup/view/screen/signup_screen.dart';
 
-//
-//class Apppages {
-//  static const initial = AppRoutes.splash;
-
-  //static final routes = [
-    //GetPage(name: AppRoutes.splash, page: () => const SplashScreen(),Binding:bindingbuilder((){Get.put(SplashController());})
-//),
-  //  GetPage(name: AppRoutes.home, Page: () => const HomeScreen(),binding: BindingBuilder((){Get.put(HomeController());})), 
-    //GetPage(name: AppRoutes.login, page: () => const LoginScreen(),binding: BindingBuilder((){Get.put(LoginController());})),
-    //GetPage(name: AppRoutes.register, page: () => const RegisterScreen(),binding: BindingBuilder((){Get.put(RegisterController());})),
-    //GetPage(name: AppRoutes.forgetPassword, page: () => const ForgetPasswordScreen(),binding: BindingBuilder((){Get.put(ForgetPasswordController());})),
-    //GetPage(name: AppRoutes.changePassword, page: () => const ChangePasswordScreen(),binding: BindingBuilder((){Get.put(ChangePasswordController());})),
-    //GetPage(name : AppRoutes.main, page: () => const MainScreen(),binding: BindingBuilder((){Get.put(MainController());})),
-    //GetPage(name: AppRoutes.profile, page: () => const ProfileScreen(),binding: BindingBuilder((){Get.put(ProfileController());})),
-    //GetPage(name: AppRoutes.notifications, page: () => const NotificationScreen(),binding: BindingBuilder((){Get.put(NotificationController());})),
-
-  //];
-//}
+class AppPages {
+  static Map<String, WidgetBuilder> routes = {
+    AppRoutes.onboarding: (context) => WellcomeScreen(),
+    AppRoutes.home: (context) => const HomeScreen(),
+    AppRoutes.login: (context) => const SigninScreen(),
+    AppRoutes.register: (context) => const SignupScreen(),
+    AppRoutes.main: (context) => const DashbordScreen(),
+    AppRoutes.profile: (context) => const SettingScreen(),
+  };
+}

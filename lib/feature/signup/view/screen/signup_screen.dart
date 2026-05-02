@@ -1,4 +1,5 @@
 import 'package:clarity/feature/core/custom_textfromfield.dart';
+import 'package:clarity/routes/app_routes.dart';
 import 'package:clarity/widgets/custom_container.dart';
 import 'package:clarity/widgets/custom_elevatedbutton.dart';
 import 'package:clarity/widgets/custom_elevatedbuttonicon.dart';
@@ -60,7 +61,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     spacing: 20,
                     children: [
                       CustomElevatedbutton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            AppRoutes.main,
+                          );
+                        },
                         title: 'Sign Up',
                         width: 300,
                       ),
@@ -89,7 +95,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         ],
                       ),
                       Customelevatedbuttonicon(
+<<<<<<< HEAD
+                        icon: Icons.apple,
+=======
                         icon: Icons.account_circle_outlined,
+>>>>>>> 04bcdefc7f537177bbf503d52e14c66914fe887f
                         color: Color(0XFF000000),
                       ),
                     ],
@@ -98,12 +108,17 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
             ),
 
-            Text(
-              'Already have an account? Sign in',
-              style: TextStyle(
-                color: Color(0XFF434655),
-                fontSize: 14,
-                fontWeight: FontWeight(400),
+            InkWell(
+              onTap: () {
+                Navigator.pushReplacementNamed(context, AppRoutes.login);
+              },
+              child: Text(
+                'Already have an account? Sign in',
+                style: TextStyle(
+                  color: Color(0XFF434655),
+                  fontSize: 14,
+                  fontWeight: FontWeight(400),
+                ),
               ),
             ),
             SizedBox(height: 20),

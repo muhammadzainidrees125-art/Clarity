@@ -1,6 +1,7 @@
 import 'package:clarity/feature/core/custom_textfromfield.dart';
+import 'package:clarity/routes/app_routes.dart';
 import 'package:clarity/widgets/custom_container.dart';
-import 'package:clarity/widgets/custom_elevatedbuttonicon.dart';
+import 'package:clarity/widgets/custom_elevatedbutton.dart';
 import 'package:flutter/material.dart';
 
 class SigninScreen extends StatefulWidget {
@@ -45,17 +46,20 @@ class _SigninScreenState extends State<SigninScreen> {
                       color: Color(0xff004AC6),
                     ),
                   ),
-                  Text(
-                    'Manage complex schedules with cognitive ease.',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight(400),
-                      color: Color(0xff434655),
+                  Flexible(
+                    child: Text(
+                      'Manage complex schedules with cognitive ease.',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight(400),
+                        color: Color(0xff434655),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
+            SizedBox(height: 10),
             CustomContainer(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,9 +109,10 @@ class _SigninScreenState extends State<SigninScreen> {
                   SizedBox(height: 20),
                   Column(
                     children: [
-                      Customelevatedbuttonicon(
-                        icon: Icons.arrow_forward,
-                        color: Color(0xff004AC6),
+                      CustomElevatedbutton(
+                        onPressed: () {},
+                        title: 'Log in',
+                        width: double.infinity,
                       ),
                       SizedBox(height: 20),
                       Row(

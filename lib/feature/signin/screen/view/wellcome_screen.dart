@@ -1,3 +1,4 @@
+import 'package:clarity/routes/app_routes.dart';
 import 'package:clarity/widgets/custom_elevatedbutton.dart';
 import 'package:flutter/material.dart';
 
@@ -120,7 +121,9 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
             ),
             SizedBox(height: 15),
             CustomElevatedbutton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, AppRoutes.register);
+              },
               title: 'Next',
               width: double.infinity,
             ),
