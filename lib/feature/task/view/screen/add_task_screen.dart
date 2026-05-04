@@ -1,9 +1,44 @@
 import 'package:clarity/core/widget/custom_textfromfield.dart';
 import 'package:clarity/core/widget/custom_elevatedbutton.dart';
 import 'package:clarity/feature/task/data/model/task_model.dart';
-import 'package:clarity/feature/task/data/source/task_data.dart';
 import 'package:clarity/feature/task/view/controller/add_task_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:clarity/feature/task/data/model/task_model.dart';
+import 'package:clarity/feature/task/data/source/task_data.dart';
+
+class AddTaskCubit extends Cubit<void> {
+  AddTaskCubit() : super(null);
+
+  String priority = "Medium";
+  List<String> tags = [];
+
+  void setPriority(String value) {
+    priority = value;
+  }
+
+  void setTags(List<String> value) {
+    tags = value;
+  }
+
+  void saveTask({
+    required String title,
+    required String description,
+    required String dueDate,
+  }) {
+    final task = TaskModel(
+      taskTitle: title,
+      description: description,
+      dueDate: dueDate,
+      priorityLevel: priority,
+      tags: tags,
+    );
+
+    listoftask.add(task);
+  }
+}
 
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({super.key});
@@ -14,82 +49,110 @@ class AddTaskScreen extends StatefulWidget {
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
   final controller = AddTaskController();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
-        title: Text('Add Task', style: TextTheme.of(context).headlineMedium),
-      ),
-      backgroundColor: Color(0xffFAF8FF),
-      body: SingleChildScrollView(
-        padding: EdgeInsetsGeometry.all(20),
-        child: Column(
-          spacing: 10,
-          children: [
-            CustomTextfromfield(
-              controller: controller.title,
-              title: 'Task Title *',
+    return BlocProvider(
+      create: (_) => AddTaskCubit(),
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              scrolledUnderElevation: 0,
+              leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.arrow_back),
+              ),
+              title: Text(
+                'Add Task',
+                style: TextTheme.of(context).headlineMedium,
+              ),
             ),
-            CustomTextfromfield(
-              controller: controller.description,
-              maxlines: 4,
-              title: 'Description',
-            ),
-            SizedBox(height: 10),
-            CustomTextfromfield(
-              controller: controller.duedate,
-              title: 'Due Date',
-              suffixIcon: Icon(Icons.calendar_today_outlined),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PrioritySelector(
-                  onChanged: (value) {
-                    setState(() {
-                      controller.selectedPriority = value;
-                    });
-                  },
-                ),
 
-                SizedBox(height: 15),
-                CustomTextfromfield(
-                  controller: TextEditingController(),
-                  title: 'Tags',
-                ),
-                TagsInputField(
-                  title: 'Taggggggs',
-                  onChanged: (p0) {
-                    controller.tags = p0;
-                  },
-                ),
-              ],
-            ),
-            Row(
-              spacing: 8,
-              children: [
-                Expanded(
-                  child: TextButton(onPressed: () {}, child: Text('Cancel')),
-                ),
-                Expanded(
-                  child: CustomElevatedbutton(
-                    onPressed: () => controller.saveTask(),
-                    fontsize: 13,
-                    title: 'Save Task',
-                    width: double.infinity,
+            backgroundColor: const Color(0xffFAF8FF),
+
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                spacing: 10,
+                children: [
+                  /// TITLE
+                  CustomTextfromfield(
+                    controller: controller.title,
+                    title: 'Task Title *',
                   ),
-                ),
-              ],
+
+                  /// DESCRIPTION
+                  CustomTextfromfield(
+                    controller: controller.description,
+                    maxlines: 4,
+                    title: 'Description',
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  /// DUE DATE
+                  CustomTextfromfield(
+                    controller: controller.duedate,
+                    title: 'Due Date',
+                    suffixIcon: const Icon(Icons.calendar_today_outlined),
+                  ),
+
+                  /// PRIORITY
+                  PrioritySelector(
+                    onChanged: (value) {
+                      context.read<AddTaskCubit>().setPriority(value);
+                    },
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  /// TAGS
+                  TagsInputField(
+                    title: 'Tags',
+                    onChanged: (list) {
+                      context.read<AddTaskCubit>().setTags(list);
+                    },
+                  ),
+
+                  /// BUTTONS
+                  Row(
+                    spacing: 8,
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Cancel'),
+                        ),
+                      ),
+
+                      Expanded(
+                        child: CustomElevatedbutton(
+                          onPressed: () {
+                            context.read<AddTaskCubit>().saveTask(
+                              title: controller.title.text,
+                              description: controller.description.text,
+                              dueDate: controller.duedate.text,
+                            );
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Task Added Successfully ✅"),
+                              ),
+                            );
+                          },
+                          fontsize: 13,
+                          title: 'Save Task',
+                          width: double.infinity,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
