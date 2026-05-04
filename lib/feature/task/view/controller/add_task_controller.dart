@@ -15,7 +15,6 @@ class AddTaskController {
       dueDate: duedate.text,
       priorityLevel: selectedPriority,
       tags: tags,
-      suggestedtasks: '',
     );
     listoftask.add(task);
   }
