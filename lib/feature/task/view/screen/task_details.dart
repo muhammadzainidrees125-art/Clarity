@@ -1,42 +1,87 @@
+import 'dart:async';
 import 'package:clarity/core/widget/custom_container.dart';
+import 'package:clarity/feature/task/data/model/task_model.dart';
+import 'package:clarity/feature/task/view/controller/add_task_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TaskDetails extends StatefulWidget {
-  final String? priority;
-  const TaskDetails({super.key, this.priority});
+  final TaskModel task;
+  final int taskIndex;
+  const TaskDetails({super.key, required this.task, required this.taskIndex});
 
   @override
   State<TaskDetails> createState() => _TaskDetailsState();
 }
 
 class _TaskDetailsState extends State<TaskDetails> {
-  late String selectedPriority;
+  Timer? _timer;
+  Duration _duration = Duration.zero;
+  bool _isRunning = false;
+  bool _taskSaved = false;
 
-  Map<String, Map<String, String>> taskData = {
-    'Low': {
-      'status': 'In Progress',
-      'title': 'Low Priority Task',
-      'description': 'This is a low priority task description.',
-      'dueDate': 'Nov 15',
-    },
-    'Medium': {
-      'status': 'In Progress',
-      'title': 'Medium Priority Task',
-      'description': 'This is a medium priority task description.',
-      'dueDate': 'Oct 25',
-    },
-    'High': {
-      'status': 'In Progress',
-      'title': 'High Priority Task',
-      'description': 'This is a high priority task description.',
-      'dueDate': 'Oct 10',
-    },
-  };
+  String get _formattedTime {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(_duration.inHours);
+    final minutes = twoDigits(_duration.inMinutes.remainder(60));
+    final seconds = twoDigits(_duration.inSeconds.remainder(60));
+    return '$hours:$minutes:$seconds';
+  }
+
+  String get _statusText {
+    if (widget.task.completed) return 'Completed';
+    if (_isRunning) return 'In Progress';
+    return 'Pending';
+  }
+
+  Color get _statusColor {
+    if (widget.task.completed) return Color(0xffD3E4FE);
+    if (_isRunning) return Color(0xffD3E4FE);
+    return Color(0xffFFE5E5);
+  }
+
+  void _startTimer() {
+    if (_timer != null) return;
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        _duration += Duration(seconds: 1);
+      });
+    });
+    setState(() {
+      _isRunning = true;
+    });
+  }
+
+  void _pauseTimer() {
+    _timer?.cancel();
+    _timer = null;
+    setState(() {
+      _isRunning = false;
+    });
+  }
+
+  void _stopTimer() {
+    _timer?.cancel();
+    _timer = null;
+    setState(() {
+      _duration = Duration.zero;
+      _isRunning = false;
+    });
+  }
+
+  void _saveTask() {
+    _pauseTimer();
+    setState(() {
+      _taskSaved = true;
+      widget.task.completed = true;
+    });
+    context.read<AddTaskCubit>().completeTask(widget.taskIndex);
+  }
 
   @override
-  void initState() {
-    super.initState();
-    selectedPriority = widget.priority ?? 'Medium';
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -44,7 +89,12 @@ class _TaskDetailsState extends State<TaskDetails> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
         title: Text(
           'Clarity',
           style: TextTheme.of(
@@ -52,9 +102,9 @@ class _TaskDetailsState extends State<TaskDetails> {
           ).titleLarge?.copyWith(fontSize: 20, fontWeight: FontWeight(700)),
         ),
       ),
-      backgroundColor: Color(0xfFf1F5F9),
+      backgroundColor: Color(0xfff1F5F9),
       body: SingleChildScrollView(
-        padding: EdgeInsetsGeometry.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           spacing: 30,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,27 +118,24 @@ class _TaskDetailsState extends State<TaskDetails> {
                     height: 24,
                     width: 94,
                     decoration: BoxDecoration(
-                      color: Color(0xffD3E4FE),
+                      color: _statusColor,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          taskData[selectedPriority]!['status']!,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight(600),
-                          ),
+                    child: Center(
+                      child: Text(
+                        _statusText,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight(600),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   Text(
-                    taskData[selectedPriority]!['title']!,
+                    widget.task.taskTitle ?? '',
                     style: TextTheme.of(context).headlineLarge,
                   ),
-                  Text(taskData[selectedPriority]!['description']!),
+                  Text(widget.task.description ?? ''),
                 ],
               ),
             ),
@@ -112,7 +159,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                             ),
                           ),
                           Text(
-                            taskData[selectedPriority]!['dueDate']!,
+                            widget.task.dueDate ?? '',
                             style: TextTheme.of(context).headlineSmall
                                 ?.copyWith(
                                   fontSize: 20,
@@ -140,7 +187,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                             ),
                           ),
                           Text(
-                            'High',
+                            widget.task.priorityLevel ?? 'Medium',
                             style: TextTheme.of(context).headlineSmall
                                 ?.copyWith(
                                   color: Color(0xffBA1A1A),
@@ -163,8 +210,8 @@ class _TaskDetailsState extends State<TaskDetails> {
                   Text('TAGS'),
                   Row(
                     spacing: 7,
-                    children: [
-                      Container(
+                    children: (widget.task.tags ?? []).map((tag) {
+                      return Container(
                         padding: EdgeInsets.all(5),
                         height: 32,
                         width: 82,
@@ -172,39 +219,17 @@ class _TaskDetailsState extends State<TaskDetails> {
                           color: Color(0xffDBE1FF),
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Column(
-                          children: [
-                            Text(
-                              '#Design',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight(500),
-                              ),
+                        child: Center(
+                          child: Text(
+                            tag,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight(600),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        height: 32,
-                        width: 82,
-                        decoration: BoxDecoration(
-                          color: Color(0xffD3E4FE),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              '#Stitch',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight(500),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
@@ -219,63 +244,99 @@ class _TaskDetailsState extends State<TaskDetails> {
                     style: TextStyle(color: Color(0xffffffff)),
                   ),
                   Text(
-                    '01:24:45',
+                    _formattedTime,
                     style: TextTheme.of(context).displayLarge?.copyWith(
                       fontSize: 64,
                       fontWeight: FontWeight(800),
                       color: Color(0xffffffff),
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        spacing: 25,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            style: IconButton.styleFrom(
-                              backgroundColor: Color(
-                                0xffFFFFFF,
-                              ).withValues(alpha: 0.20),
-                            ),
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.crop_square_sharp,
-                              size: 30,
-                              color: Color(0xffffffff),
-                            ),
+                  if (_taskSaved || widget.task.completed)
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Center(
+                        child: Text(
+                          'Task Saved',
+                          style: TextStyle(
+                            color: Color(0xffffffff),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
                           ),
-                          CustomContainer(
-                            padding: EdgeInsets.all(4),
-                            borderRadius: BorderRadius.circular(60),
-                            child: Column(
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.pause, size: 50),
-                                  color: Color(0xff2563EB),
-                                ),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            style: IconButton.styleFrom(
-                              backgroundColor: Color(
-                                0xffFFFFFF,
-                              ).withValues(alpha: 0.20),
-                            ),
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.refresh,
-                              size: 30,
-                              color: Color(0xffffffff),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ],
-                  ),
+                    )
+                  else
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          spacing: 25,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 56,
+                              height: 56,
+                              child: IconButton(
+                                style: IconButton.styleFrom(
+                                  backgroundColor: Color(
+                                    0xffFFFFFF,
+                                  ).withValues(alpha: 0.20),
+                                  shape: CircleBorder(),
+                                ),
+                                onPressed: _stopTimer,
+                                icon: Icon(
+                                  Icons.crop_square_sharp,
+                                  size: 30,
+                                  color: Color(0xffffffff),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 72,
+                              height: 72,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: _isRunning
+                                      ? Color(0xff2563EB)
+                                      : Color(0xffffffff),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: IconButton(
+                                  onPressed: _isRunning
+                                      ? _pauseTimer
+                                      : _startTimer,
+                                  icon: Icon(
+                                    _isRunning ? Icons.pause : Icons.play_arrow,
+                                    size: 40,
+                                  ),
+                                  color: _isRunning
+                                      ? Color(0xffffffff)
+                                      : Color(0xff2563EB),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 56,
+                              height: 56,
+                              child: IconButton(
+                                style: IconButton.styleFrom(
+                                  backgroundColor: Color(
+                                    0xffFFFFFF,
+                                  ).withValues(alpha: 0.20),
+                                  shape: CircleBorder(),
+                                ),
+                                onPressed: _saveTask,
+                                icon: Icon(
+                                  Icons.save,
+                                  size: 30,
+                                  color: Color(0xffffffff),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),

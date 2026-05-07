@@ -4,6 +4,7 @@ class TaskModel {
   String? dueDate;
   String? priorityLevel;
   List<String>? tags;
+  bool completed;
 
   TaskModel({
     required this.taskTitle,
@@ -11,6 +12,7 @@ class TaskModel {
     required this.dueDate,
     required this.priorityLevel,
     required this.tags,
+    this.completed = false,
   });
 
   TaskModel copyWith({
@@ -19,6 +21,7 @@ class TaskModel {
     String? dueDate,
     String? priority,
     List<String>? tags,
+    bool? completed,
   }) {
     return TaskModel(
       taskTitle: title ?? this.taskTitle,
@@ -26,6 +29,7 @@ class TaskModel {
       dueDate: dueDate ?? this.dueDate,
       priorityLevel: priority ?? this.priorityLevel,
       tags: tags ?? this.tags,
+      completed: completed ?? this.completed,
     );
   }
 }
