@@ -7,6 +7,7 @@ List<TaskModel> listoftask = [
     dueDate: '05/01/2026',
     priorityLevel: 'Medium',
     tags: ['Work'],
+    completed: false,
   ),
 
   TaskModel(
@@ -15,6 +16,7 @@ List<TaskModel> listoftask = [
     dueDate: '05/02/2026',
     priorityLevel: 'High',
     tags: ['Health'],
+    completed: false,
   ),
 
   TaskModel(
@@ -23,6 +25,7 @@ List<TaskModel> listoftask = [
     dueDate: '05/03/2026',
     priorityLevel: 'Low',
     tags: ['Office'],
+    completed: true,
   ),
 
   TaskModel(
@@ -31,6 +34,7 @@ List<TaskModel> listoftask = [
     dueDate: '05/04/2026',
     priorityLevel: 'Medium',
     tags: ['Personal'],
+    completed: false,
   ),
 
   TaskModel(
@@ -39,5 +43,6 @@ List<TaskModel> listoftask = [
     dueDate: '05/05/2026',
     priorityLevel: 'High',
     tags: ['Learning', 'Coding'], // 👈 multiple tags possible
+    completed: false,
   ),
 ];
