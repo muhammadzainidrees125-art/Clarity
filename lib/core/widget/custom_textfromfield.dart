@@ -8,6 +8,8 @@ class CustomTextfromfield extends StatefulWidget {
     this.suffixIcon,
     this.maxlines,
     this.isCompulsory = false,
+    this.obscureText = false,
+    this.onSuffixIconPressed,
     required this.controller,
   });
 
@@ -16,6 +18,8 @@ class CustomTextfromfield extends StatefulWidget {
   final Widget? suffixIcon;
   final int? maxlines;
   final bool isCompulsory;
+  final bool obscureText;
+  final VoidCallback? onSuffixIconPressed;
   final TextEditingController controller;
 
   @override
@@ -34,9 +38,16 @@ class _CustomTextfromfieldState extends State<CustomTextfromfield> {
           ),
         TextFormField(
           controller: widget.controller,
-          maxLines: widget.maxlines,
+          maxLines: widget.obscureText ? 1 : widget.maxlines,
+          minLines: 1,
+          obscureText: widget.obscureText,
           decoration: InputDecoration(
-            suffixIcon: widget.suffixIcon,
+            suffixIcon: widget.onSuffixIconPressed != null
+                ? GestureDetector(
+                    onTap: widget.onSuffixIconPressed,
+                    child: widget.suffixIcon,
+                  )
+                : widget.suffixIcon,
             prefixIcon: widget.prefixIcon,
             filled: true,
             fillColor: Color(0xffF3F3FE),

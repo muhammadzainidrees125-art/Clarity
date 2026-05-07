@@ -28,7 +28,7 @@ class _CustomContainerState extends State<CustomContainer> {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3), // shadow color
+            color: Colors.black.withValues(alpha: 0.3), // shadow color
             spreadRadius: 1, // kitna phailay
             blurRadius: 2, // softness (jitna zyada utni blur)
             offset: Offset(0, 1),
