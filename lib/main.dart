@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import 'package:clarity/feature/signin/view/controller/signin_cubit_controller.dart';
 import 'package:clarity/feature/signup/view/controller/signup_cubit_controller.dart';
+=======
+>>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
 import 'package:clarity/feature/task/view/controller/add_task_cubit.dart';
 import 'package:clarity/routes/app_pages.dart';
 import 'package:clarity/routes/app_routes.dart';
@@ -25,12 +28,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
+<<<<<<< HEAD
       providers: [
         BlocProvider(create: (context) => SigninCubit()),
         BlocProvider(create: (context) => SignupCubit()),
         BlocProvider(create: (context) => AddTaskCubit()),
       ],
 
+=======
+      providers: [BlocProvider(create: (context) => AddTaskCubit())],
+>>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
       child: MaterialApp(
         title: 'Clarity',
         theme: AppTheme.lightTheme,

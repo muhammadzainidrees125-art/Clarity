@@ -2,120 +2,119 @@ import 'package:clarity/feature/home_feature/view/widget/custom_card.dart';
 import 'package:clarity/feature/home_feature/view/widget/daily_progress.dart';
 import 'package:clarity/routes/app_routes.dart';
 import 'package:clarity/core/widget/custom_container.dart';
+import 'package:clarity/feature/task/data/model/task_model.dart';
+import 'package:clarity/feature/task/view/controller/add_task_cubit.dart';
+import 'package:clarity/feature/task/view/screen/task_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddTaskCubit, List<TaskModel>>(
+      builder: (context, tasks) {
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.task);
+            },
+            backgroundColor: Color(0XFF004AC6),
+            foregroundColor: Color(0XFFFAF8FF),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Icon(Icons.add),
+          ),
+          backgroundColor: Color(0XFFFAF8FF),
+          body: HomeScreenContent(tasks: tasks),
+        );
+      },
+    );
+  }
+}
+
+class HomeScreenContent extends StatefulWidget {
+  const HomeScreenContent({super.key, required this.tasks});
+
+  final List<TaskModel> tasks;
+
+  @override
+  State<HomeScreenContent> createState() => _HomeScreenContentState();
 }
 
 enum TaskStatus { all, pending, completed }
 
-class TaskItem {
-  TaskItem({
-    required this.title,
-    required this.subtitle,
-    required this.badgeText,
-    required this.badgeColor,
-    required this.completed,
-    required this.hasLeftBorder,
-  });
-
-  final String title;
-  final String subtitle;
-  final String badgeText;
-  final Color badgeColor;
-  final bool completed;
-  final bool hasLeftBorder;
-}
-
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenContentState extends State<HomeScreenContent> {
   TaskStatus selectedStatus = TaskStatus.all;
 
-  final List<TaskItem> tasks = [
-    TaskItem(
-      title: 'Finalize Q4 Marketing Budget',
-      subtitle: 'Today, 10:00 AM',
-      badgeText: 'HIGH',
-      badgeColor: Color(0xffFFDAD6),
-      completed: false,
-      hasLeftBorder: true,
-    ),
-    TaskItem(
-      title: 'Update Design System Tokens',
-      subtitle: 'Today, 2:30 PM',
-      badgeText: 'MEDIUM',
-      badgeColor: Color(0xffFFDBCD),
-      completed: false,
-      hasLeftBorder: true,
-    ),
-    TaskItem(
-      title: 'Morning Standup Meeting',
-      subtitle: 'Completed 9:15 AM',
-      badgeText: 'ROUTINE',
-      badgeColor: Color(0xffD0E1FB),
-      completed: true,
-      hasLeftBorder: true,
-    ),
-  ];
-
-  List<TaskItem> get filteredTasks {
-    if (selectedStatus == TaskStatus.all) return tasks;
+  List<TaskModel> get filteredTasks {
+    if (selectedStatus == TaskStatus.all) return widget.tasks;
     if (selectedStatus == TaskStatus.pending) {
-      return tasks.where((task) => !task.completed).toList();
+      return widget.tasks.where((task) => !task.completed).toList();
     }
-    return tasks.where((task) => task.completed).toList();
+    return widget.tasks.where((task) => task.completed).toList();
+  }
+
+  Color getBadgeColor(String? priority) {
+    switch (priority?.toLowerCase()) {
+      case 'high':
+        return Color(0xffFFDAD6);
+      case 'medium':
+        return Color(0xffFFDBCD);
+      case 'low':
+        return Color(0xffD0E1FB);
+      default:
+        return Color(0xffD0E1FB);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.task);
-        },
-        backgroundColor: Color(0XFF004AC6),
-        foregroundColor: Color(0XFFFAF8FF),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        child: Icon(Icons.add),
-      ),
-
-      backgroundColor: Color(0XFFFAF8FF),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          spacing: 12,
-          children: [
-            DailyProgress(),
-            CustomCard(),
-            TaskChoiceChipSection(
-              selectedIndex: selectedStatus.index,
-              onSelected: (index) {
-                setState(() {
-                  selectedStatus = TaskStatus.values[index];
-                });
-              },
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              spacing: 15,
-              children: filteredTasks.map((task) {
-                return CustomContainer(
-                  border: task.hasLeftBorder
-                      ? Border(
-                          left: BorderSide(
-                            color: task.completed
-                                ? Color(0XFF004AC6)
-                                : Color(0xffBA1A1A),
-                            width: 4,
-                          ),
-                        )
-                      : null,
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(25),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        spacing: 12,
+        children: [
+          DailyProgress(),
+          CustomCard(),
+          TaskChoiceChipSection(
+            selectedIndex: selectedStatus.index,
+            onSelected: (index) {
+              setState(() {
+                selectedStatus = TaskStatus.values[index];
+              });
+            },
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            spacing: 15,
+            children: filteredTasks.map((task) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TaskDetails(
+                        task: task,
+                        taskIndex: widget.tasks.indexOf(task),
+                      ),
+                    ),
+                  );
+                },
+                child: CustomContainer(
+                  border: Border(
+                    left: BorderSide(
+                      color: task.completed
+                          ? Color(0XFF004AC6)
+                          : Color(0xffBA1A1A),
+                      width: 4,
+                    ),
+                  ),
                   padding: EdgeInsets.all(10),
                   child: Column(
                     children: [
@@ -134,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  task.title,
+                                  task.taskTitle ?? '',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight(500),
@@ -146,28 +145,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                   spacing: 10,
                                   children: [
                                     Image.asset('assets/Icon (2).png'),
-                                    Text(task.subtitle),
+                                    Text(task.dueDate ?? ''),
                                     Container(
                                       padding: EdgeInsets.all(5),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(
                                           100,
                                         ),
-                                        color: task.badgeColor,
+                                        color: getBadgeColor(
+                                          task.priorityLevel,
+                                        ),
                                       ),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            task.badgeText,
-                                            style: TextStyle(
-                                              color: task.completed
-                                                  ? Color(0xff54647A)
-                                                  : Color(0xffBA1A1A),
-                                              fontSize: 10,
-                                              fontWeight: FontWeight(700),
-                                            ),
-                                          ),
-                                        ],
+                                      child: Text(
+                                        task.priorityLevel ?? 'Medium',
+                                        style: TextStyle(
+                                          color: task.completed
+                                              ? Color(0xff54647A)
+                                              : Color(0xffBA1A1A),
+                                          fontSize: 10,
+                                          fontWeight: FontWeight(700),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -179,11 +176,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                );
-              }).toList(),
-            ),
-          ],
-        ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
     );
   }
