@@ -1,6 +1,6 @@
 import 'package:clarity/core/widget/custom_textfromfield.dart';
 import 'package:clarity/core/widget/custom_elevatedbutton.dart';
-import 'package:clarity/feature/task/view/controller/add_task_controller.dart';
+import 'package:clarity/feature/task/view/controller/add_task_cubit.dart';
 import 'package:clarity/feature/task/view/state/add_task_state.dart';
 import 'package:clarity/feature/task/view/widget/priority_selector.dart';
 import 'package:clarity/feature/task/view/widget/tag_input_field.dart';
