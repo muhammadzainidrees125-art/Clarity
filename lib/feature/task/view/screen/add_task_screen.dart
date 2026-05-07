@@ -1,6 +1,12 @@
 import 'package:clarity/core/widget/custom_textfromfield.dart';
 import 'package:clarity/core/widget/custom_elevatedbutton.dart';
 import 'package:clarity/feature/task/view/controller/add_task_cubit.dart';
+<<<<<<< HEAD
+import 'package:clarity/feature/task/view/state/add_task_state.dart';
+import 'package:clarity/feature/task/view/widget/priority_selector.dart';
+import 'package:clarity/feature/task/view/widget/tag_input_field.dart';
+=======
+>>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,8 +18,24 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
+<<<<<<< HEAD
+  final controller = AddTaskCubit();
+
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(create: (_) => AddTaskCubit(), child: AddTaskView());
+  }
+}
+
+class AddTaskView extends StatelessWidget {
+  const AddTaskView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+=======
+  @override
+  Widget build(BuildContext context) {
+>>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
     final controller = context.read<AddTaskCubit>();
     return Scaffold(
       appBar: AppBar(
@@ -24,9 +46,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         ),
         title: Text('Add Task', style: TextTheme.of(context).headlineMedium),
       ),
+<<<<<<< HEAD
+      backgroundColor: const Color(0xffFAF8FF),
+=======
 
       backgroundColor: const Color(0xffFAF8FF),
 
+>>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -57,7 +83,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             /// PRIORITY
             PrioritySelector(
               onChanged: (value) {
+<<<<<<< HEAD
+                controller.setPriority(value);
+=======
                 context.read<AddTaskCubit>().setPriority(value);
+>>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
               },
             ),
 
@@ -67,7 +97,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             TagsInputField(
               title: 'Tags',
               onChanged: (list) {
+<<<<<<< HEAD
+                controller.setTags(list);
+=======
                 context.read<AddTaskCubit>().setTags(list);
+>>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
               },
             ),
 
@@ -83,6 +117,27 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ),
 
                 Expanded(
+<<<<<<< HEAD
+                  child: BlocBuilder<AddTaskCubit, AddTaskState>(
+                    builder: (context, state) {
+                      final controller = context.read<AddTaskCubit>();
+                      return CustomElevatedbutton(
+                        width: double.infinity,
+                        onPressed: state.isLoading
+                            ? null
+                            : () {
+                                controller.saveTask();
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Task Added Successfully ✅"),
+                                  ),
+                                );
+                              },
+                        title: state.isLoading ? 'Saving...' : 'Save Task',
+                      );
+                    },
+=======
                   child: CustomElevatedbutton(
                     onPressed: () {
                       context.read<AddTaskCubit>().saveTask(context);
@@ -96,6 +151,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     fontsize: 13,
                     title: 'Save Task',
                     width: double.infinity,
+>>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
                   ),
                 ),
               ],
@@ -103,148 +159,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class PrioritySelector extends StatefulWidget {
-  final Function(String) onChanged;
-  const PrioritySelector({super.key, required this.onChanged});
-
-  @override
-  State<PrioritySelector> createState() => _PrioritySelectorState();
-}
-
-class _PrioritySelectorState extends State<PrioritySelector> {
-  String selectedPriority = 'Medium';
-
-  List<String> priorities = ['Low', 'Medium', 'High'];
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Priority Level'),
-        SizedBox(height: 8),
-
-        Wrap(
-          spacing: 10,
-          children: priorities.map((item) {
-            return ChoiceChip(
-              showCheckmark: false,
-              label: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    height: 8,
-                    width: 8,
-                    decoration: BoxDecoration(
-                      color: item == 'Low'
-                          ? Color(0xff22C55E)
-                          : item == 'Medium'
-                          ? Color(0xffF59E0B)
-                          : Color(0xffEF4444),
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                  ),
-                  SizedBox(width: 5),
-                  Text(item),
-                ],
-              ),
-
-              selected: selectedPriority == item,
-
-              selectedColor: Color(0xffD0E1FB),
-              backgroundColor: Color(0xffF3F3FE),
-
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: BorderSide(color: Color(0xffC3C6D7)),
-              ),
-
-              onSelected: (val) {
-                setState(() {
-                  selectedPriority = item;
-                });
-                widget.onChanged(item);
-              },
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-}
-
-class TagsInputField extends StatefulWidget {
-  final String title;
-  final Function(List<String>) onChanged;
-
-  const TagsInputField({
-    super.key,
-    required this.title,
-    required this.onChanged,
-  });
-
-  @override
-  State<TagsInputField> createState() => _TagsInputFieldState();
-}
-
-class _TagsInputFieldState extends State<TagsInputField> {
-  final TextEditingController _controller = TextEditingController();
-  List<String> tags = [];
-
-  void addTag(String value) {
-    if (value.trim().isEmpty) return;
-
-    setState(() {
-      tags.add(value.trim());
-      _controller.clear();
-    });
-
-    widget.onChanged(tags); // return list to parent
-  }
-
-  void removeTag(String tag) {
-    setState(() {
-      tags.remove(tag);
-    });
-
-    widget.onChanged(tags);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(widget.title),
-
-        const SizedBox(height: 8),
-
-        TextField(
-          controller: _controller,
-          onSubmitted: addTag,
-          decoration: const InputDecoration(
-            hintText: "Type tag and press enter",
-            border: OutlineInputBorder(),
-          ),
-        ),
-
-        const SizedBox(height: 10),
-
-        Wrap(
-          spacing: 8,
-          children: tags.map((tag) {
-            return Chip(
-              label: Text(tag),
-              deleteIcon: const Icon(Icons.close),
-              onDeleted: () => removeTag(tag),
-            );
-          }).toList(),
-        ),
-      ],
     );
   }
 }
