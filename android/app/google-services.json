@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "556215043595",
+    "project_id": "clarity-app-3378a",
+    "storage_bucket": "clarity-app-3378a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556215043595:android:3a78cbe50f93c0af89290e",
+        "android_client_info": {
+          "package_name": "com.example.clarity"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFHawI3A6TIqnkuVOWGbTFAA1Aw1zy2uI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

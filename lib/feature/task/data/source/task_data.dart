@@ -7,7 +7,9 @@ List<TaskModel> listoftask = [
     dueDate: '05/01/2026',
     priorityLevel: 'Medium',
     tags: ['Work'],
-    completed: false,
+    completed: true,
+    completedDate: DateTime.now().subtract(Duration(days: 1)),
+    focusTimeMinutes: 45,
   ),
 
   TaskModel(
@@ -16,7 +18,9 @@ List<TaskModel> listoftask = [
     dueDate: '05/02/2026',
     priorityLevel: 'High',
     tags: ['Health'],
-    completed: false,
+    completed: true,
+    completedDate: DateTime.now(),
+    focusTimeMinutes: 60,
   ),
 
   TaskModel(
@@ -26,6 +30,8 @@ List<TaskModel> listoftask = [
     priorityLevel: 'Low',
     tags: ['Office'],
     completed: true,
+    completedDate: DateTime.now().subtract(Duration(days: 2)),
+    focusTimeMinutes: 90,
   ),
 
   TaskModel(
@@ -35,6 +41,7 @@ List<TaskModel> listoftask = [
     priorityLevel: 'Medium',
     tags: ['Personal'],
     completed: false,
+    focusTimeMinutes: 0,
   ),
 
   TaskModel(
@@ -42,7 +49,20 @@ List<TaskModel> listoftask = [
     description: 'Practice UI layouts and state management',
     dueDate: '05/05/2026',
     priorityLevel: 'High',
-    tags: ['Learning', 'Coding'], // 👈 multiple tags possible
-    completed: false,
+    tags: ['Learning', 'Coding'],
+    completed: true,
+    completedDate: DateTime.now(),
+    focusTimeMinutes: 120,
+  ),
+
+  TaskModel(
+    taskTitle: 'Design mockups',
+    description: 'Create UI mockups for new feature',
+    dueDate: '05/06/2026',
+    priorityLevel: 'High',
+    tags: ['Design'],
+    completed: true,
+    completedDate: DateTime.now().subtract(Duration(days: 3)),
+    focusTimeMinutes: 150,
   ),
 ];

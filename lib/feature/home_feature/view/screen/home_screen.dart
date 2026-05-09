@@ -1,5 +1,6 @@
 import 'package:clarity/feature/home_feature/view/widget/custom_card.dart';
 import 'package:clarity/feature/home_feature/view/widget/daily_progress.dart';
+import 'package:clarity/feature/home_feature/view/widget/weekly_statistics.dart';
 import 'package:clarity/routes/app_routes.dart';
 import 'package:clarity/core/widget/custom_container.dart';
 import 'package:clarity/feature/task/data/model/task_model.dart';
@@ -80,7 +81,7 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
         spacing: 12,
         children: [
           DailyProgress(),
-          CustomCard(),
+
           TaskChoiceChipSection(
             selectedIndex: selectedStatus.index,
             onSelected: (index) {
