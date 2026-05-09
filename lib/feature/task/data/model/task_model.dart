@@ -5,6 +5,8 @@ class TaskModel {
   String? priorityLevel;
   List<String>? tags;
   bool completed;
+  DateTime? completedDate; // When task was completed
+  int focusTimeMinutes; // Focus time spent on this task
 
   TaskModel({
     required this.taskTitle,
@@ -13,6 +15,8 @@ class TaskModel {
     required this.priorityLevel,
     required this.tags,
     this.completed = false,
+    this.completedDate,
+    this.focusTimeMinutes = 0,
   });
 
   TaskModel copyWith({
@@ -22,6 +26,8 @@ class TaskModel {
     String? priority,
     List<String>? tags,
     bool? completed,
+    DateTime? completedDate,
+    int? focusTimeMinutes,
   }) {
     return TaskModel(
       taskTitle: title ?? this.taskTitle,
@@ -30,6 +36,8 @@ class TaskModel {
       priorityLevel: priority ?? this.priorityLevel,
       tags: tags ?? this.tags,
       completed: completed ?? this.completed,
+      completedDate: completedDate ?? this.completedDate,
+      focusTimeMinutes: focusTimeMinutes ?? this.focusTimeMinutes,
     );
   }
 }

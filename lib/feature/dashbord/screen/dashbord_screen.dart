@@ -28,21 +28,21 @@ class _DashbordScreenState extends State<DashbordScreen> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
-              color: val == 0 ? Colors.blueAccent : Colors.white54,
+              color: val == 0 ? Colors.white : Colors.blueAccent,
             ),
             label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.add_chart_rounded,
-              color: val == 1 ? Colors.blueAccent : Colors.white54,
+              color: val == 1 ? Colors.white : Colors.blueAccent,
             ),
             label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.add_chart_rounded,
-              color: val == 2 ? Colors.blueAccent : Colors.white54,
+              Icons.person,
+              color: val == 2 ? Colors.white : Colors.blueAccent,
             ),
             label: '',
           ),

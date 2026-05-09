@@ -1,12 +1,9 @@
 import 'package:clarity/core/widget/custom_textfromfield.dart';
 import 'package:clarity/core/widget/custom_elevatedbutton.dart';
 import 'package:clarity/feature/task/view/controller/add_task_cubit.dart';
-<<<<<<< HEAD
-import 'package:clarity/feature/task/view/state/add_task_state.dart';
+import 'package:clarity/feature/task/data/model/task_model.dart';
 import 'package:clarity/feature/task/view/widget/priority_selector.dart';
 import 'package:clarity/feature/task/view/widget/tag_input_field.dart';
-=======
->>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,8 +15,8 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-<<<<<<< HEAD
   final controller = AddTaskCubit();
+  TextEditingController dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +29,6 @@ class AddTaskView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-=======
-  @override
-  Widget build(BuildContext context) {
->>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
     final controller = context.read<AddTaskCubit>();
     return Scaffold(
       appBar: AppBar(
@@ -46,16 +39,11 @@ class AddTaskView extends StatelessWidget {
         ),
         title: Text('Add Task', style: TextTheme.of(context).headlineMedium),
       ),
-<<<<<<< HEAD
       backgroundColor: const Color(0xffFAF8FF),
-=======
-
-      backgroundColor: const Color(0xffFAF8FF),
-
->>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
           children: [
             /// TITLE
@@ -76,18 +64,30 @@ class AddTaskView extends StatelessWidget {
             /// DUE DATE
             CustomTextfromfield(
               controller: controller.duedate,
+
               title: 'Due Date',
-              suffixIcon: const Icon(Icons.calendar_today_outlined),
+              suffixIcon: IconButton(
+                onPressed: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+
+                  if (pickedDate != null) {
+                    controller.duedate.text =
+                        "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+                  }
+                },
+                icon: const Icon(Icons.calendar_month),
+              ),
             ),
 
             /// PRIORITY
             PrioritySelector(
               onChanged: (value) {
-<<<<<<< HEAD
                 controller.setPriority(value);
-=======
-                context.read<AddTaskCubit>().setPriority(value);
->>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
               },
             ),
 
@@ -97,11 +97,7 @@ class AddTaskView extends StatelessWidget {
             TagsInputField(
               title: 'Tags',
               onChanged: (list) {
-<<<<<<< HEAD
                 controller.setTags(list);
-=======
-                context.read<AddTaskCubit>().setTags(list);
->>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
               },
             ),
 
@@ -117,41 +113,22 @@ class AddTaskView extends StatelessWidget {
                 ),
 
                 Expanded(
-<<<<<<< HEAD
-                  child: BlocBuilder<AddTaskCubit, AddTaskState>(
-                    builder: (context, state) {
+                  child: BlocBuilder<AddTaskCubit, List<TaskModel>>(
+                    builder: (context, tasks) {
                       final controller = context.read<AddTaskCubit>();
                       return CustomElevatedbutton(
                         width: double.infinity,
-                        onPressed: state.isLoading
-                            ? null
-                            : () {
-                                controller.saveTask();
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Task Added Successfully ✅"),
-                                  ),
-                                );
-                              },
-                        title: state.isLoading ? 'Saving...' : 'Save Task',
+                        onPressed: () {
+                          controller.saveTask(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Task Added Successfully ✅"),
+                            ),
+                          );
+                        },
+                        title: 'Save Task',
                       );
                     },
-=======
-                  child: CustomElevatedbutton(
-                    onPressed: () {
-                      context.read<AddTaskCubit>().saveTask(context);
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Task Added Successfully ✅"),
-                        ),
-                      );
-                    },
-                    fontsize: 13,
-                    title: 'Save Task',
-                    width: double.infinity,
->>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
                   ),
                 ),
               ],

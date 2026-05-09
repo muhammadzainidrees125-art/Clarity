@@ -8,6 +8,7 @@ class CustomContainer extends StatefulWidget {
     this.padding,
     this.borderRadius,
     this.border,
+    this.width,
   });
 
   final Widget child;
@@ -15,6 +16,7 @@ class CustomContainer extends StatefulWidget {
   final Color? color;
   final EdgeInsets? padding;
   final BorderRadius? borderRadius;
+  final double? width;
   @override
   State<CustomContainer> createState() => _CustomContainerState();
 }
@@ -23,6 +25,7 @@ class _CustomContainerState extends State<CustomContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: widget.width,
       padding: widget.padding ?? EdgeInsets.all(24),
 
       decoration: BoxDecoration(
