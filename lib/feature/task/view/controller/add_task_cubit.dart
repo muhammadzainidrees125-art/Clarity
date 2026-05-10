@@ -62,3 +62,8 @@ class AddTaskCubit extends Cubit<List<TaskModel>> {
     emit(List.from(listoftask));
   }
 }
+
+
+  void completeTask(int taskIndex) {}
+
+  void completeTask(int taskIndex) {}
