@@ -87,3 +87,8 @@ class AddTaskCubit extends Cubit<List<TaskModel>> {
 >>>>>>> 1e1a00af5f8471e94e67a9113bf314bb530924a5
   }
 }
+
+
+  void completeTask(int taskIndex) {}
+
+  void completeTask(int taskIndex) {}
