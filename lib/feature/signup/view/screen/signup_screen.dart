@@ -16,10 +16,12 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final signupCubit = SignupCubit();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignupCubit(),
+      create: (context) => signupCubit,
       child: BlocListener<SignupCubit, SignupState>(
         listener: (context, state) {
           if (state is SignupError) {
@@ -80,26 +82,20 @@ class _SignupScreenState extends State<SignupScreen> {
                     spacing: 40,
                     children: [
                       CustomTextfromfield(
-                        controller: context
-                            .read<SignupCubit>()
-                            .fullNameController,
+                        controller: signupCubit.fullNameController,
                         title: 'Full Name',
                       ),
                       CustomTextfromfield(
-                        controller: context.read<SignupCubit>().emailController,
+                        controller: signupCubit.emailController,
                         title: 'Email Address',
                       ),
                       CustomTextfromfield(
-                        controller: context
-                            .read<SignupCubit>()
-                            .passwordController,
+                        controller: signupCubit.passwordController,
                         title: 'Password',
                         obscureText: true,
                       ),
                       CustomTextfromfield(
-                        controller: context
-                            .read<SignupCubit>()
-                            .confirmPasswordController,
+                        controller: signupCubit.confirmPasswordController,
                         title: 'Confirm Password',
                         obscureText: true,
                       ),
@@ -109,10 +105,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           BlocBuilder<SignupCubit, SignupState>(
                             builder: (context, state) {
                               return CustomElevatedbutton(
-                                onPressed: () => Navigator.pushReplacementNamed(
-                                  context,
-                                  AppRoutes.main,
-                                ),
+                                onPressed: () =>
+                                    context.read<SignupCubit>().register(),
                                 title: 'Sign Up',
                                 width: 300,
                               );

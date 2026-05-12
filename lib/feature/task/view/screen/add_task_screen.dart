@@ -7,20 +7,12 @@ import 'package:clarity/feature/task/view/widget/tag_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddTaskScreen extends StatefulWidget {
+class AddTaskScreen extends StatelessWidget {
   const AddTaskScreen({super.key});
 
   @override
-  State<AddTaskScreen> createState() => _AddTaskScreenState();
-}
-
-class _AddTaskScreenState extends State<AddTaskScreen> {
-  final controller = AddTaskCubit();
-  TextEditingController dateController = TextEditingController();
-
-  @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => AddTaskCubit(), child: AddTaskView());
+    return const AddTaskView();
   }
 }
 
@@ -118,13 +110,8 @@ class AddTaskView extends StatelessWidget {
                       final controller = context.read<AddTaskCubit>();
                       return CustomElevatedbutton(
                         width: double.infinity,
-                        onPressed: () {
-                          controller.saveTask(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Task Added Successfully ✅"),
-                            ),
-                          );
+                        onPressed: () async {
+                          await controller.saveTask(context);
                         },
                         title: 'Save Task',
                       );
