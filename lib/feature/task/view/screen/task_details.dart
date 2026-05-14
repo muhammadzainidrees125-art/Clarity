@@ -17,27 +17,50 @@ class TaskDetails extends StatefulWidget {
 class _TaskDetailsState extends State<TaskDetails> {
   Timer? _timer;
   Duration _duration = Duration.zero;
+  int _pendingSeconds = 0;
   bool _isRunning = false;
   bool _taskSaved = false;
 
+  int get _totalTrackedSeconds =>
+      (widget.task.focusTimeMinutes * 60) + _duration.inSeconds;
+
   String get _formattedTime {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final hours = twoDigits(_duration.inHours);
-    final minutes = twoDigits(_duration.inMinutes.remainder(60));
-    final seconds = twoDigits(_duration.inSeconds.remainder(60));
+    final hours = twoDigits(_totalTrackedSeconds ~/ 3600);
+    final minutes = twoDigits((_totalTrackedSeconds % 3600) ~/ 60);
+    final seconds = twoDigits(_totalTrackedSeconds % 60);
     return '$hours:$minutes:$seconds';
   }
 
   String get _statusText {
     if (widget.task.completed) return 'Completed';
-    if (_isRunning) return 'In Progress';
+    if (_isRunning || widget.task.focusTimeMinutes > 0) return 'In Progress';
     return 'Pending';
   }
 
   Color get _statusColor {
     if (widget.task.completed) return Color(0xffD3E4FE);
-    if (_isRunning) return Color(0xffD3E4FE);
+    if (_isRunning || widget.task.focusTimeMinutes > 0)
+      return Color(0xffD3E4FE);
     return Color(0xffFFE5E5);
+  }
+
+  Future<void> _syncPendingFocusTime() async {
+    if (_pendingSeconds < 300) return;
+
+    final blocks = _pendingSeconds ~/ 300;
+    final minutesToSave = blocks * 5;
+    _pendingSeconds -= blocks * 300;
+
+    final cubit = context.read<AddTaskCubit>();
+    try {
+      await cubit.updateFocusTime(widget.taskIndex, minutesToSave);
+      setState(() {
+        widget.task.focusTimeMinutes += minutesToSave;
+      });
+    } catch (e) {
+      print('Error syncing focus time: $e');
+    }
   }
 
   void _startTimer() {
@@ -45,42 +68,50 @@ class _TaskDetailsState extends State<TaskDetails> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         _duration += Duration(seconds: 1);
+        _pendingSeconds += 1;
       });
+      if (_pendingSeconds >= 300) {
+        _syncPendingFocusTime();
+      }
     });
     setState(() {
       _isRunning = true;
     });
   }
 
-  void _pauseTimer() {
+  Future<void> _pauseTimer() async {
     _timer?.cancel();
     _timer = null;
     setState(() {
       _isRunning = false;
     });
+    await _syncPendingFocusTime();
   }
 
-  void _stopTimer() {
+  Future<void> _stopTimer() async {
     _timer?.cancel();
     _timer = null;
     setState(() {
       _duration = Duration.zero;
       _isRunning = false;
     });
+    await _syncPendingFocusTime();
   }
 
-  void _saveTask() {
-    _pauseTimer();
+  Future<void> _saveTask() async {
+    final cubit = context.read<AddTaskCubit>();
+    await _pauseTimer();
     setState(() {
       _taskSaved = true;
       widget.task.completed = true;
     });
-    context.read<AddTaskCubit>().completeTask(widget.taskIndex);
+    cubit.completeTask(widget.taskIndex);
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+    _syncPendingFocusTime();
     super.dispose();
   }
 

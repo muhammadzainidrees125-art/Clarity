@@ -2,7 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clarity/feature/task/data/model/task_model.dart';
 
-class TaskFirebaseService {
+abstract interface class TaskService {
+  Future<void> saveTask(TaskModel task);
+
+  Future<List<TaskModel>> getAllTasks();
+
+  Stream<List<TaskModel>> getTasksStream();
+
+  Future<void> updateTask(TaskModel task);
+
+  Future<void> deleteTask(String taskId);
+
+  Future<void> toggleTaskCompletion(String taskId, bool isCompleted);
+}
+
+class TaskFirebaseService implements TaskService {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
 
@@ -14,6 +28,7 @@ class TaskFirebaseService {
       _firestore.collection('tasks');
 
   // Save task to Firebase
+  @override
   Future<void> saveTask(TaskModel task) async {
     if (_userId == null) {
       throw Exception('User not authenticated');
@@ -29,6 +44,7 @@ class TaskFirebaseService {
   }
 
   // Get all tasks for current user
+  @override
   Future<List<TaskModel>> getAllTasks() async {
     if (_userId == null) {
       throw Exception('User not authenticated');
@@ -47,6 +63,7 @@ class TaskFirebaseService {
   }
 
   // Stream of tasks (real-time updates)
+  @override
   Stream<List<TaskModel>> getTasksStream() {
     if (_userId == null) {
       return const Stream.empty();
@@ -63,6 +80,7 @@ class TaskFirebaseService {
   }
 
   // Update task
+  @override
   Future<void> updateTask(TaskModel task) async {
     if (_userId == null || task.id == null) {
       throw Exception('User not authenticated or task ID missing');
@@ -76,6 +94,7 @@ class TaskFirebaseService {
   }
 
   // Delete task
+  @override
   Future<void> deleteTask(String taskId) async {
     if (_userId == null) {
       throw Exception('User not authenticated');
@@ -89,6 +108,7 @@ class TaskFirebaseService {
   }
 
   // Toggle task completion
+  @override
   Future<void> toggleTaskCompletion(String taskId, bool isCompleted) async {
     if (_userId == null) {
       throw Exception('User not authenticated');

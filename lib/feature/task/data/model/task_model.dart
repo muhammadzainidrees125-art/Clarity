@@ -1,24 +1,16 @@
-class TaskModel {
-  String? taskTitle;
-  String? description;
-  String? dueDate;
-  String? priorityLevel;
-  List<String>? tags;
-  bool completed;
-  DateTime? completedDate; // When task was completed
-  int focusTimeMinutes; // Focus time spent on this task
-  String? id; // Firestore document ID
+import 'package:clarity/feature/task/domain/entity/task_entity.dart';
 
+class TaskModel extends TaskEntity {
   TaskModel({
-    required this.taskTitle,
-    required this.description,
-    required this.dueDate,
-    required this.priorityLevel,
-    required this.tags,
-    this.completed = false,
-    this.completedDate,
-    this.focusTimeMinutes = 0,
-    this.id,
+    required super.taskTitle,
+    required super.description,
+    required super.dueDate,
+    required super.priorityLevel,
+    required super.tags,
+    super.completed = false,
+    super.completedDate,
+    super.focusTimeMinutes = 0,
+    super.id,
   });
 
   TaskModel copyWith({
