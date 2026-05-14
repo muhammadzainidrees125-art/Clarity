@@ -17,20 +17,19 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
-      builder: (context) => MyApp(), // Wrap your app
+      builder: (context) => Clarity(), // Wrap your app
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Clarity extends StatelessWidget {
+  const Clarity({super.key});
 
   // This widget is the  root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => SigninCubit()),
         BlocProvider(create: (context) => SignupCubit()),
         BlocProvider(create: (context) => AddTaskCubit()),
       ],

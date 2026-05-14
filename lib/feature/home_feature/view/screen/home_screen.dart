@@ -1,6 +1,5 @@
-import 'package:clarity/feature/home_feature/view/widget/custom_card.dart';
+import 'package:clarity/feature/home_feature/view/widget/choise_chips.dart';
 import 'package:clarity/feature/home_feature/view/widget/daily_progress.dart';
-import 'package:clarity/feature/home_feature/view/widget/weekly_statistics.dart';
 import 'package:clarity/routes/app_routes.dart';
 import 'package:clarity/core/widget/custom_container.dart';
 import 'package:clarity/feature/task/data/model/task_model.dart';
@@ -58,7 +57,7 @@ class HomeScreenContent extends StatefulWidget {
   State<HomeScreenContent> createState() => _HomeScreenContentState();
 }
 
-enum TaskStatus { all, pending, completed }
+enum TaskStatus { all, pending, inProgress, completed }
 
 class _HomeScreenContentState extends State<HomeScreenContent> {
   TaskStatus selectedStatus = TaskStatus.all;
@@ -66,7 +65,10 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
   List<TaskModel> get filteredTasks {
     if (selectedStatus == TaskStatus.all) return widget.tasks;
     if (selectedStatus == TaskStatus.pending) {
-      return widget.tasks.where((task) => !task.completed).toList();
+      return widget.tasks.where((task) => !task.completed && task.focusTimeMinutes == 0).toList();
+    }
+    if (selectedStatus == TaskStatus.inProgress) {
+      return widget.tasks.where((task) => !task.completed && task.focusTimeMinutes > 0).toList();
     }
     return widget.tasks.where((task) => task.completed).toList();
   }
@@ -196,69 +198,6 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class TaskChoiceChipSection extends StatelessWidget {
-  const TaskChoiceChipSection({
-    super.key,
-    required this.selectedIndex,
-    required this.onSelected,
-  });
-
-  final int selectedIndex;
-  final ValueChanged<int> onSelected;
-
-  final List<String> items = const ['All', 'Pending', 'Completed'];
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: List.generate(items.length, (index) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: CustomChoiceChip(
-              title: items[index],
-              isSelected: selectedIndex == index,
-              onTap: () => onSelected(index),
-            ),
-          );
-        }),
-      ),
-    );
-  }
-}
-
-class CustomChoiceChip extends StatelessWidget {
-  const CustomChoiceChip({
-    super.key,
-    required this.isSelected,
-    required this.title,
-    required this.onTap,
-  });
-
-  final bool isSelected;
-  final String title;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return ChoiceChip(
-      padding: EdgeInsets.all(4),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      backgroundColor: Colors.grey.shade200,
-      selectedColor: Color(0XFF004AC6),
-      showCheckmark: false,
-      label: Text(
-        title,
-        style: TextStyle(color: isSelected ? Colors.white : Colors.black),
-      ),
-      selected: isSelected,
-      onSelected: (_) => onTap(),
     );
   }
 }
